@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const routes = require('./routes');
 // require('./services/passport');
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('Yee'))
   .catch(e => console.log(e));
 
