@@ -12,6 +12,8 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('Yee'))
   .catch(e => console.log(e));
 
+mongoose.set('debug', true);
+
 const PORT = process.env.PORT || 3001;
 
 const app = express();
