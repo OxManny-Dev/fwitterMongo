@@ -1,9 +1,13 @@
 require('dotenv')
   .config();
 const express = require('express');
+const mongoose = require('mongoose');
 const routes = require('./routes');
-
 // require('./services/passport');
+
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Yee'))
+  .catch(e => console.log(e));
 
 const PORT = process.env.PORT || 3001;
 
