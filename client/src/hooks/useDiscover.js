@@ -21,7 +21,7 @@ export const useDiscover = () => {
   // the useEffect function will be called again
   useEffect(() => {
     loadNextDog();
-  }, []);
+  }, [])
 
   const loadNextDog = () => {
     API.search()

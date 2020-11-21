@@ -12,6 +12,8 @@ const UserSchema = new Schema({
     minlength: 6,
     required: [true, 'Password is required'],
   },
+  hobbies: Array,
+  chameleons: [ { type: Schema.Types.ObjectId, ref: 'Chameleon'} ],
   // creditCard: {
   //   type: String,
   //   validate: {
