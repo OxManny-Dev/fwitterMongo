@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-
+const bcrypt = require('bcryptjs');
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -31,7 +31,6 @@ const UserSchema = new Schema({
 
 UserSchema.static({
   findByUsername: function(username) {
-    console.log('I AM THE THIS IN findByUsername', this);
     try {
       return this.find({ username });
     } catch (e) {
@@ -40,7 +39,6 @@ UserSchema.static({
     }
   },
   findOneByUsername: function(username) {
-    console.log('I AM THE THIS IN findByUsername', this);
     try {
       return this.findOne({ username });
     } catch (e) {
@@ -49,7 +47,6 @@ UserSchema.static({
     }
   },
   findByHobbies: function(hobbies) {
-    console.log('I AM THE THIS IN findByHobbies');
     try {
       return this.find({
         $in: {
@@ -66,11 +63,31 @@ UserSchema.static({
 // Methods belongs to an INSTANCE of the collection
 UserSchema.method({
   sayMyUsername: function() {
-    console.log('i am the this', this);
     console.log(`I AM ${this.username}`);
   },
-})
+  comparePassword: async function(candidatePassword) {
+    console.log('this in compare password',this);
+    try {
+      return await bcrypt.compare(candidatePassword, this.password);
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+});
 
+UserSchema.pre('save', async function(next) {
+  console.log('I am the this in pre hook', this);
+  const user = this;
+  if (user.isModified('password')) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    } catch (e) {
+      next(e);
+    }
+  }
+  next();
+});
 
 
 const User = model('User', UserSchema);
