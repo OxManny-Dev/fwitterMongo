@@ -3,7 +3,7 @@ require('dotenv')
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes');
-// require('./services/passport');
+require('./services/passport');
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,

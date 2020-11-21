@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const { User } = require('../model');
+
 
 const tokenForUser = (id) => {
   return jwt.sign({
@@ -9,23 +11,24 @@ const tokenForUser = (id) => {
 
 
 module.exports = {
-  signInApi: (req, res) => {
+  signIn: (req, res) => {
     console.log('I AM THE LOGGED IN USER', req.user);
-    res.json(tokenForUser(req.user.id));
+    res.json(tokenForUser(req.user._id));
   },
-  signUpApi: async (req, res) => {
-    // const { username, password } = req.body;
-    // console.log(req.body);
-    // try {
-    //   const user = await insertUserToDb(username, password);
-    //   res.json(tokenForUser(user.id));
-    // } catch (e) {
-    //   console.log(e);
-    //   res.status(400)
-    //     .json(e);
-    // }
+  signUp: async (req, res) => {
+    const { username, password } = req.body;
+    console.log(req.body);
+    try {
+      const user = await User.create({ username, password });
+      console.log('I AM THE ID', user.id);
+      res.json(tokenForUser(user._id));
+    } catch (e) {
+      console.log(e);
+      res.status(400)
+        .json(e);
+    }
   },
-  signOutApi: (req, res) => {
+  signOut: (req, res) => {
     req.logOut();
     res.json({ success: 'You are now logged out' });
   },
